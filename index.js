@@ -72,18 +72,6 @@ mongoose.connection.once("open", function(err){
 			
 				console.log(valid);
 				
-				ShortUrl.findOne({urls: url}, function(err, result){
-					
-					if(err){
-						console.log(err);
-						mongoose.disconnect();
-						return;
-					}
-					
-					res.json(result.shortUrl);
-					
-				});
-				
 				i = Math.floor(Math.random()*1000+1);
 		
 				ShortUrl.create({ urls: url, shortUrl: i }, function(err, snippet) {
@@ -94,7 +82,19 @@ mongoose.connection.once("open", function(err){
 					}
 		
 					console.log("Short url created");
-					res.json(i);
+					//res.json(i);
+					
+				});
+				
+				ShortUrl.findOne({urls: url}, function(err, result){
+					
+					if(err){
+						console.log(err);
+						mongoose.disconnect();
+						return;
+					}
+					
+					res.json(result.shortUrl);
 					
 				});
 			

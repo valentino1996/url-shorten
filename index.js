@@ -5,6 +5,7 @@ var valid = require ("url-valid");
 var app = express();
 
 var i;
+var bool=false;
 
 mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valentino", function (err) {
 	
@@ -42,6 +43,7 @@ mongoose.connection.once("open", function(err){
 	
 		var url = req.params.url;
 		console.log(url);
+		bool=false;
 		
 		if(!isNaN(Number(url))){
 			
@@ -92,6 +94,8 @@ mongoose.connection.once("open", function(err){
 					}
 		
 					console.log("Short url created");
+					res.json(i);
+					bool=true;
 					
 				});
 				
@@ -103,7 +107,9 @@ mongoose.connection.once("open", function(err){
 						return;
 					}
 					
-					res.json(result.shortUrl);
+					if(!bool){
+						res.json(result.shortUrl);
+					}
 					
 				});
 			

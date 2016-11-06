@@ -53,6 +53,11 @@ mongoose.connection.once("open", function(err){
 					return;
 				}
 				
+				if(result===null){
+					res.json("url does not exist");
+					return;
+				}
+				
 				res.redirect(result.urls);
 					
 			});
@@ -71,6 +76,11 @@ mongoose.connection.once("open", function(err){
 				}
 			
 				console.log(valid);
+				
+				if(valid===false){
+					res.json("url does not exist");
+					return;
+				}
 				
 				i = Math.floor(Math.random()*1000+1);
 		
@@ -91,6 +101,11 @@ mongoose.connection.once("open", function(err){
 					if(err){
 						console.log(err);
 						mongoose.disconnect();
+						return;
+					}
+					
+					if(result===null){
+						res.json("url does not exist");
 						return;
 					}
 					

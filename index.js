@@ -54,7 +54,7 @@ mongoose.connection.once("open", function(err){
 				}
 				
 				if(result===null){
-					res.json("url does not exist");
+					res.json("wrong shortcut");
 					return;
 				}
 				
@@ -78,7 +78,7 @@ mongoose.connection.once("open", function(err){
 				console.log(valid);
 				
 				if(valid===false){
-					res.json("url does not exist");
+					res.json("wrong url parameter");
 					return;
 				}
 				
@@ -92,7 +92,6 @@ mongoose.connection.once("open", function(err){
 					}
 		
 					console.log("Short url created");
-					//res.json(i);
 					
 				});
 				
@@ -101,11 +100,6 @@ mongoose.connection.once("open", function(err){
 					if(err){
 						console.log(err);
 						mongoose.disconnect();
-						return;
-					}
-					
-					if(result===null){
-						res.json("url does not exist");
 						return;
 					}
 					

@@ -4,7 +4,7 @@ var valid = require ("url-valid");
 
 var app = express();
 
-var i, uu;
+var i;
 
 mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valentino", function (err) {
 	
@@ -14,7 +14,6 @@ mongoose.connect("mongodb://test:test@ds053156.mlab.com:53156/mongodb-test-valen
 	
 	else {
 		console.log('Connection established');
-	
 	}
 });
 
@@ -38,18 +37,14 @@ mongoose.connection.once("open", function(err){
 	app.get("/", function(req, res){
 		res.send("add a parameter");
 	});
-	
-	
-	//app.get("/"+uu, function(req, res){
-		//res.send(i);
-	//});
 
 	app.get("/:url", function(req, res){
 	
-		var url =req.params.url;
+		var url = req.params.url;
 		console.log(url);
 		
 		if(!isNaN(Number(url))){
+			
 			ShortUrl.findOne({shortUrl: url}, function(err, result){
 				
 				if(err){
@@ -61,41 +56,50 @@ mongoose.connection.once("open", function(err){
 				res.redirect(result.urls);
 					
 			});
-			return;
+			
 		}
 		
 		else {
 		
-		url =  'http://' + req.params.url;
+			url =  'http://' + req.params.url;
 	
-		valid(url, function (err, valid) {
+			valid(url, function (err, valid) {
 			
-			if (err) {
-				console.log(err);
-				return;
-			}
-			
-			console.log(valid);
-			
-			i = Math.floor(Math.random()*1000+1);
-			res.json(i);
-			uu = req.params.url;
-			console.log(uu);
-		
-			ShortUrl.create({ urls: url, shortUrl: i }, function(err, snippet) {
-		
-				if (err || !snippet) {
-					console.error("Could not create a short url");
-					mongoose.disconnect();
+				if (err) {
+					console.log(err);
 					return;
 				}
-		
-				console.log("Short Url created");
-				mongoose.disconnect();
-			});
 			
-		});
-	}
+				console.log(valid);
+				
+				ShortUrl.findOne({urls: url}, function(err, result){
+					
+					if(err){
+						console.log(err);
+						mongoose.disconnect();
+						return;
+					}
+					
+					res.json(result.shortUrl);
+					
+				});
+				
+				i = Math.floor(Math.random()*1000+1);
+		
+				ShortUrl.create({ urls: url, shortUrl: i }, function(err, snippet) {
+		
+					if (err || !snippet) {
+						console.error("Could not create a short url");
+						return;
+					}
+		
+					console.log("Short url created");
+					res.json(i);
+					
+				});
+			
+			});
+		}
 
 	});
 	
